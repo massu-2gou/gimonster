@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ギモン</title>
+<title>ギモンスターと考えよう</title>
 <style>
   * { box-sizing: border-box; }
   body {
@@ -158,6 +158,7 @@
 
 <div class="header">
   <h1>🟢 ギモンスターと考えよう！</h1>
+  <p>調べ学習サポートAI（試作版）</p>
 </div>
 
 <div class="container">
@@ -188,7 +189,7 @@
 
 <script>
   // ===== 設定（ここを書き換えてください） =====
-  const GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzkyxtOnei4uN8-yj_cwP3nfyznNiRj-FWuuC4j7omYR_7tKjFDNWlZ-0lmWwNFt1qi/exec"; // ★ GASのWebAppのURLをここに入れる
+  const GAS_WEBAPP_URL = "YOUR_GAS_WEBAPP_URL_HERE"; // ★ GASのWebAppのURLをここに入れる
   // APIキーはここには書きません。GAS側のスクリプトプロパティに保管します。
   // ============================================
 
@@ -264,9 +265,13 @@
           ? [{ role: "user", content: userText }]
           : conversationHistory
       };
-      const url = GAS_WEBAPP_URL + "?payload=" + encodeURIComponent(JSON.stringify(payload));
 
-      const response = await fetch(url, { method: "GET" });
+      // Content-Typeを指定しない（デフォルトの text/plain;charset=UTF-8 が使われる）
+      // これにより「シンプルリクエスト」となり、プリフライト(OPTIONS)が発生しない
+      const response = await fetch(GAS_WEBAPP_URL, {
+        method: "POST",
+        body: JSON.stringify(payload)
+      });
 
       const data = await response.json();
 
@@ -302,10 +307,12 @@
       userText: userText,
       gimoReply: gimoReply
     };
-    const url = GAS_WEBAPP_URL + "?payload=" + encodeURIComponent(JSON.stringify(payload));
 
-    fetch(url, { method: "GET", mode: "no-cors" })
-      .catch(err => console.error('記録送信エラー:', err));
+    fetch(GAS_WEBAPP_URL, {
+      method: "POST",
+      mode: "no-cors",
+      body: JSON.stringify(payload)
+    }).catch(err => console.error('記録送信エラー:', err));
   }
 </script>
 
