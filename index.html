@@ -189,8 +189,9 @@
 
 <script>
   // ===== 設定（ここを書き換えてください） =====
-  const GAS_WEBAPP_URL = "YOUR_GAS_WEBAPP_URL_HERE"; // ★ GASのWebAppのURLをここに入れる
-  // APIキーはここには書きません。GAS側のスクリプトプロパティに保管します。
+  const WORKER_URL = "https://gimonster.ryuvow.workers.dev/"; // ★ CloudflareワーカーのURLをここに入れる
+  const GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwOmvOxUdtXTtD-TnrmxqeJohSk-tD6HTvs_-jI0LpGDdBHRuel_HXT3RyzwysT4vM/exec"; // ★ GASのWebAppのURL（記録用）
+  // APIキーはどちらにも書きません。Cloudflare Workerの環境変数に保管します。
   // ============================================
 
   let conversationHistory = [];
@@ -206,8 +207,8 @@
       alert('なまえと課題、両方入力してね！');
       return;
     }
-    if (GAS_WEBAPP_URL === "YOUR_GAS_WEBAPP_URL_HERE") {
-      alert('GASのURLが設定されていません。index.html内のGAS_WEBAPP_URLを書き換えてください。');
+    if (WORKER_URL === "YOUR_WORKER_URL_HERE") {
+      alert('WorkerのURLが設定されていません。index.html内のWORKER_URLを書き換えてください。');
       return;
     }
 
@@ -258,19 +259,16 @@
     }
 
     try {
-      const payload = {
-        action: "chat",
-        topic: topic,
-        messages: isFirstMessage
-          ? [{ role: "user", content: userText }]
-          : conversationHistory
-      };
-
-      // Content-Typeを指定しない（デフォルトの text/plain;charset=UTF-8 が使われる）
-      // これにより「シンプルリクエスト」となり、プリフライト(OPTIONS)が発生しない
-      const response = await fetch(GAS_WEBAPP_URL, {
+      // Cloudflare WorkerにPOST（CORSは Worker側で解決済み）
+      const response = await fetch(WORKER_URL, {
         method: "POST",
-        body: JSON.stringify(payload)
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          topic: topic,
+          messages: isFirstMessage
+            ? [{ role: "user", content: userText }]
+            : conversationHistory
+        })
       });
 
       const data = await response.json();
