@@ -2,189 +2,274 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>ギモンスターと考えよう</title>
 <style>
-  * { box-sizing: border-box; }
-  body {
-    font-family: "Hiragino Maru Gothic ProN", "Hiragino Kaku Gothic ProN", sans-serif;
-    background: #FFF8E7;
-    margin: 0;
-    padding: 0;
-    color: #3d2e1f;
-  }
-  .header {
-    background: #FFB703;
-    padding: 16px 20px;
-    text-align: center;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
-  }
-  .header h1 {
-    margin: 0;
-    font-size: 22px;
-    color: #5c3a00;
-  }
-  .header p {
-    margin: 4px 0 0;
-    font-size: 13px;
-    color: #6b4500;
-  }
-  .container {
-    max-width: 640px;
-    margin: 0 auto;
-    padding: 16px;
-  }
-  .setup-box {
-    background: #fff;
-    border-radius: 16px;
-    padding: 20px;
-    margin-bottom: 16px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-  }
-  .setup-box label {
-    display: block;
-    font-size: 14px;
-    font-weight: bold;
-    margin: 12px 0 6px;
-    color: #5c3a00;
-  }
-  .setup-box input, .setup-box textarea {
-    width: 100%;
-    padding: 10px 12px;
-    border: 2px solid #FFE8B0;
-    border-radius: 10px;
-    font-size: 15px;
-    font-family: inherit;
-  }
-  .setup-box textarea { min-height: 70px; resize: vertical; }
-  .start-btn {
-    width: 100%;
-    margin-top: 16px;
-    padding: 14px;
-    background: #FB8500;
-    color: white;
-    border: none;
-    border-radius: 12px;
-    font-size: 17px;
-    font-weight: bold;
-    cursor: pointer;
-  }
-  .start-btn:active { transform: scale(0.98); }
-  .start-btn:disabled { background: #ccc; }
+  @import url('https://fonts.googleapis.com/css2?family=DotGothic16&display=swap');
 
-  #chat-screen { display: none; }
-  .chat-log {
-    background: #fff;
-    border-radius: 16px;
-    padding: 16px;
-    min-height: 300px;
-    max-height: 60vh;
-    overflow-y: auto;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-  }
-  .msg {
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #1a0a00;
     display: flex;
-    margin-bottom: 16px;
-    align-items: flex-start;
-    gap: 10px;
-  }
-  .msg.user { flex-direction: row-reverse; }
-  .avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    flex-shrink: 0;
-    display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    min-height: 100vh;
+    font-family: 'DotGothic16', monospace;
+    color: #fff;
+  }
+
+  /* ===== セットアップ画面 ===== */
+  #setup-screen {
+    background: #000;
+    border: 4px solid #fff;
+    padding: 32px 28px;
+    max-width: 420px;
+    width: 90%;
+    text-align: center;
+  }
+  #setup-screen h1 {
     font-size: 20px;
-  }
-  .avatar.gimo { background: #FFB703; }
-  .avatar.user { background: #8ECAE6; }
-  .bubble {
-    max-width: 75%;
-    padding: 12px 14px;
-    border-radius: 16px;
-    font-size: 15px;
+    color: #FFD700;
+    margin-bottom: 24px;
     line-height: 1.6;
-    white-space: pre-wrap;
   }
-  .bubble.gimo { background: #FFF3D6; border-bottom-left-radius: 4px; }
-  .bubble.user { background: #DCEFFA; border-bottom-right-radius: 4px; }
-  .typing {
-    font-size: 14px;
-    color: #999;
-    padding: 8px 0;
+  .setup-field { margin-bottom: 18px; text-align: left; }
+  .setup-field label {
+    display: block;
+    font-size: 13px;
+    color: #aaa;
+    margin-bottom: 6px;
   }
-  .input-row {
-    display: flex;
-    gap: 8px;
-    margin-top: 12px;
-  }
-  .input-row input {
-    flex: 1;
-    padding: 14px;
-    border: 2px solid #FFE8B0;
-    border-radius: 12px;
-    font-size: 16px;
-    font-family: inherit;
-  }
-  .input-row button {
-    padding: 14px 20px;
-    background: #FB8500;
-    color: white;
-    border: none;
-    border-radius: 12px;
+  .setup-field input,
+  .setup-field textarea {
+    width: 100%;
+    background: #111;
+    border: 2px solid #555;
+    color: #fff;
+    font-family: 'DotGothic16', monospace;
     font-size: 15px;
-    font-weight: bold;
+    padding: 10px;
+    outline: none;
+  }
+  .setup-field input:focus,
+  .setup-field textarea:focus { border-color: #FFD700; }
+  .setup-field textarea { min-height: 80px; resize: vertical; }
+  #start-btn {
+    margin-top: 8px;
+    width: 100%;
+    background: #FFD700;
+    color: #000;
+    border: none;
+    font-family: 'DotGothic16', monospace;
+    font-size: 16px;
+    padding: 14px;
     cursor: pointer;
   }
-  .input-row button:disabled { background: #ccc; }
-  .status {
-    text-align: center;
-    font-size: 12px;
-    color: #999;
-    margin-top: 8px;
+  #start-btn:hover { background: #ffe54d; }
+  #start-btn:disabled { background: #555; color: #888; cursor: default; }
+
+  /* ===== ゲーム画面 ===== */
+  #game-screen { display: none; width: 100%; max-width: 640px; }
+
+  /* 上半分：フィールド */
+  .field {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 2 / 1;
+    background: #1a3a00 url('field1.jpg') center/cover no-repeat;
+    image-rendering: pixelated;
   }
-  .turn-counter {
+  .enemy-wrap {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -60%);
+  }
+  #enemy-img {
+    width: 160px;
+    height: 160px;
+    image-rendering: pixelated;
+    display: block;
+  }
+  .enemy-wrap.shake { animation: shake 0.4s; }
+  @keyframes shake {
+    0%,100%{transform:translate(-50%,-60%)}
+    25%{transform:translate(calc(-50% - 8px),-60%)}
+    75%{transform:translate(calc(-50% + 8px),-60%)}
+  }
+  .enemy-wrap.bounce { animation: bounce 0.4s; }
+  @keyframes bounce {
+    0%,100%{transform:translate(-50%,-60%)}
+    50%{transform:translate(-50%,calc(-60% - 16px))}
+  }
+
+  /* ターンカウンター */
+  .turn-badge {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    background: rgba(0,0,0,0.7);
+    border: 2px solid #FFD700;
+    color: #FFD700;
+    font-size: 12px;
+    padding: 4px 10px;
+  }
+
+  /* 下半分：テキストウィンドウ */
+  .text-window {
+    background: #000;
+    border: 4px solid #fff;
+    border-top: none;
+    padding: 16px 20px 14px;
+    min-height: 120px;
+    position: relative;
+  }
+  .speaker-label {
+    font-size: 12px;
+    color: #FFD700;
+    margin-bottom: 6px;
+  }
+  #dialog-text {
+    font-size: 15px;
+    line-height: 1.8;
+    color: #fff;
+    min-height: 60px;
+    white-space: pre-wrap;
+  }
+  /* セリフ送り矢印 */
+  #next-arrow {
+    position: absolute;
+    bottom: 12px;
+    right: 16px;
+    font-size: 18px;
+    color: #FFD700;
+    animation: blink 0.8s step-end infinite;
+    display: none;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  /* ローディング */
+  #loading-dots {
+    color: #aaa;
+    font-size: 14px;
+    display: none;
+  }
+
+  /* 入力エリア */
+  .input-area {
+    background: #111;
+    border: 4px solid #fff;
+    border-top: 2px solid #444;
+    display: none;
+    padding: 12px 14px;
+    gap: 8px;
+    align-items: center;
+  }
+  .input-area.visible { display: flex; }
+  #user-input {
+    flex: 1;
+    background: #000;
+    border: 2px solid #555;
+    color: #fff;
+    font-family: 'DotGothic16', monospace;
+    font-size: 15px;
+    padding: 10px;
+    outline: none;
+  }
+  #user-input:focus { border-color: #FFD700; }
+  #send-btn {
+    background: #FFD700;
+    color: #000;
+    border: none;
+    font-family: 'DotGothic16', monospace;
+    font-size: 14px;
+    padding: 10px 16px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  #send-btn:disabled { background: #555; color: #888; cursor: default; }
+
+  /* 正解演出オーバーレイ */
+  #clear-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 16px;
+    z-index: 100;
+  }
+  #clear-overlay.show { display: flex; }
+  .clear-title {
+    font-size: 28px;
+    color: #FFD700;
     text-align: center;
-    font-size: 13px;
-    color: #6b4500;
-    margin-bottom: 8px;
+    line-height: 1.6;
+  }
+  .clear-sub {
+    font-size: 14px;
+    color: #ccc;
+    text-align: center;
+  }
+  #retry-btn {
+    margin-top: 8px;
+    background: #FFD700;
+    color: #000;
+    border: none;
+    font-family: 'DotGothic16', monospace;
+    font-size: 15px;
+    padding: 12px 32px;
+    cursor: pointer;
   }
 </style>
 </head>
 <body>
 
-<div class="header">
-  <h1>🟢 ギモンスターと考えよう！</h1>
-  <p>調べ学習サポートAI（試作版）</p>
+<!-- セットアップ画面 -->
+<div id="setup-screen">
+  <h1>⚔ ギモンスターと<br>考えよう！</h1>
+  <div class="setup-field">
+    <label for="student-name">きみのなまえ</label>
+    <input type="text" id="student-name" placeholder="例：たろう">
+  </div>
+  <div class="setup-field">
+    <label for="topic">きょうの課題</label>
+    <textarea id="topic" placeholder="例：なぜ生き物には筋肉があるのか"></textarea>
+  </div>
+  <button id="start-btn" onclick="startGame()">ぼうけんをはじめる！</button>
 </div>
 
-<div class="container">
-
-  <!-- セットアップ画面 -->
-  <div id="setup-screen" class="setup-box">
-    <label>きみのなまえ</label>
-    <input type="text" id="student-name" placeholder="例：たろう">
-
-    <label>きょうの課題（先生が決めたもの）</label>
-    <textarea id="topic" placeholder="例：なぜ生き物には筋肉があるのか"></textarea>
-
-    <button class="start-btn" id="start-btn" onclick="startChat()">ギモンスターをよぶ！</button>
-  </div>
-
-  <!-- チャット画面 -->
-  <div id="chat-screen">
-    <div class="turn-counter" id="turn-counter">対話回数：0回</div>
-    <div class="chat-log" id="chat-log"></div>
-    <div class="input-row">
-      <input type="text" id="user-input" placeholder="きみの考えを書いてみよう" onkeydown="if(event.key==='Enter')sendMessage()">
-      <button id="send-btn" onclick="sendMessage()">送信</button>
+<!-- ゲーム画面 -->
+<div id="game-screen">
+  <div class="field">
+    <div class="enemy-wrap" id="enemy-wrap">
+      <img id="enemy-img" src="enemy1.png" alt="ギモンスター">
     </div>
-    <div class="status" id="status"></div>
+    <div class="turn-badge" id="turn-badge">ターン 0</div>
   </div>
 
+  <div class="text-window">
+    <div class="speaker-label" id="speaker-label">ギモンスター</div>
+    <div id="dialog-text"></div>
+    <div id="loading-dots">考え中…</div>
+    <div id="next-arrow">▼</div>
+  </div>
+
+  <div class="input-area" id="input-area">
+    <input type="text" id="user-input" placeholder="きみの考えを書こう" maxlength="200">
+    <button id="send-btn" onclick="sendMessage()">送る</button>
+  </div>
+</div>
+
+<!-- 正解演出 -->
+<div id="clear-overlay">
+  <div class="clear-title">✨ 大正解！！ ✨<br>ギモンスターを倒した！</div>
+  <div class="clear-sub" id="clear-sub"></div>
+  <button id="retry-btn" onclick="location.reload()">もう一度あそぶ</button>
 </div>
 
 <script>
@@ -199,67 +284,159 @@
   let topic = "";
   let turnCount = 0;
 
-  function startChat() {
+  // テキスト送り用
+  let pendingPages = [];   // セリフを区切ったページ配列
+  let currentPage = 0;
+  let isTyping = false;
+  let typingTimer = null;
+  let waitingForNext = false; // セリフ送り待ち状態
+
+  // ===== ゲーム開始 =====
+  function startGame() {
     studentName = document.getElementById('student-name').value.trim();
     topic = document.getElementById('topic').value.trim();
-
-    if (!studentName || !topic) {
-      alert('なまえと課題、両方入力してね！');
-      return;
-    }
-    if (WORKER_URL === "YOUR_WORKER_URL_HERE") {
-      alert('WorkerのURLが設定されていません。index.html内のWORKER_URLを書き換えてください。');
-      return;
-    }
+    if (!studentName || !topic) { alert('なまえと課題を入力してね！'); return; }
+    if (WORKER_URL === "YOUR_WORKER_URL_HERE") { alert('WORKER_URLを設定してください'); return; }
 
     document.getElementById('setup-screen').style.display = 'none';
-    document.getElementById('chat-screen').style.display = 'block';
+    document.getElementById('game-screen').style.display = 'block';
 
-    // 最初のメッセージをギモンスターから送る
-    callGimonster("（ギモンスターとして、課題「" + topic + "」について、最初の問いかけをしてください。元気よく自己紹介もしてください）", true);
+    setLoading(true);
+    callGimonster("（ギモンスターとして、課題「" + topic + "」について元気よく自己紹介し、最初の問いかけをしてください。短めの文を区切りながら話してください）", true);
   }
 
-  function appendMessage(role, text) {
-    const log = document.getElementById('chat-log');
-    const msgDiv = document.createElement('div');
-    msgDiv.className = 'msg ' + (role === 'user' ? 'user' : 'gimo');
-    msgDiv.innerHTML = `
-      <div class="avatar ${role === 'user' ? 'user' : 'gimo'}">${role === 'user' ? '🧒' : '🟢'}</div>
-      <div class="bubble ${role === 'user' ? 'user' : 'gimo'}"></div>
-    `;
-    msgDiv.querySelector('.bubble').textContent = text;
-    log.appendChild(msgDiv);
-    log.scrollTop = log.scrollHeight;
+  // ===== テキスト表示 =====
+  function showReply(text) {
+    // 「。」「！」「？」「ギモ」の後で改ページ区切り
+    const pages = splitIntoPages(text);
+    pendingPages = pages;
+    currentPage = 0;
+    showPage();
   }
 
-  function setLoading(isLoading) {
-    document.getElementById('send-btn').disabled = isLoading;
-    document.getElementById('user-input').disabled = isLoading;
-    document.getElementById('status').textContent = isLoading ? 'ギモンスターが考え中…' : '';
+  function splitIntoPages(text) {
+    // 長さで区切る（60文字ごと、ただし文末を優先）
+    const sentences = text.split(/(?<=[。！？\n])/);
+    const pages = [];
+    let current = "";
+    for (const s of sentences) {
+      if ((current + s).length > 80 && current.length > 0) {
+        pages.push(current.trim());
+        current = s;
+      } else {
+        current += s;
+      }
+    }
+    if (current.trim()) pages.push(current.trim());
+    return pages.length > 0 ? pages : [text];
   }
 
+  function showPage() {
+    if (currentPage >= pendingPages.length) {
+      // 全ページ表示終了 → 入力を開放
+      document.getElementById('next-arrow').style.display = 'none';
+      showInput();
+      return;
+    }
+
+    const pageText = pendingPages[currentPage];
+    waitingForNext = false;
+    isTyping = true;
+    document.getElementById('next-arrow').style.display = 'none';
+    document.getElementById('dialog-text').textContent = "";
+
+    // 1文字ずつ表示
+    let i = 0;
+    function typeNext() {
+      if (i < pageText.length) {
+        document.getElementById('dialog-text').textContent += pageText[i];
+        i++;
+        typingTimer = setTimeout(typeNext, 40);
+      } else {
+        isTyping = false;
+        // 最終ページでなければセリフ送り矢印を表示
+        if (currentPage < pendingPages.length - 1) {
+          waitingForNext = true;
+          document.getElementById('next-arrow').style.display = 'block';
+        } else {
+          // 最終ページ → 入力開放
+          document.getElementById('next-arrow').style.display = 'none';
+          showInput();
+        }
+      }
+    }
+    typeNext();
+  }
+
+  function advancePage() {
+    if (isTyping) {
+      // タイピング中はスキップ
+      clearTimeout(typingTimer);
+      isTyping = false;
+      document.getElementById('dialog-text').textContent = pendingPages[currentPage];
+      if (currentPage < pendingPages.length - 1) {
+        waitingForNext = true;
+        document.getElementById('next-arrow').style.display = 'block';
+      } else {
+        document.getElementById('next-arrow').style.display = 'none';
+        showInput();
+      }
+    } else if (waitingForNext) {
+      currentPage++;
+      showPage();
+    }
+  }
+
+  // キーボード・タップでセリフ送り
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !document.getElementById('input-area').classList.contains('visible')) {
+      advancePage();
+    }
+  });
+  document.getElementById('game-screen') && document.addEventListener('click', (e) => {
+    if (!document.getElementById('input-area').classList.contains('visible') &&
+        !e.target.closest('#input-area') &&
+        !e.target.closest('#setup-screen')) {
+      advancePage();
+    }
+  });
+
+  function showInput() {
+    document.getElementById('input-area').classList.add('visible');
+    document.getElementById('user-input').focus();
+  }
+
+  function hideInput() {
+    document.getElementById('input-area').classList.remove('visible');
+    document.getElementById('user-input').value = '';
+  }
+
+  // ===== メッセージ送信 =====
   async function sendMessage() {
     const input = document.getElementById('user-input');
     const text = input.value.trim();
-    if (!text) return;
+    if (!text || document.getElementById('send-btn').disabled) return;
 
-    appendMessage('user', text);
-    input.value = '';
+    hideInput();
     turnCount++;
-    document.getElementById('turn-counter').textContent = '対話回数：' + turnCount + '回';
+    document.getElementById('turn-badge').textContent = 'ターン ' + turnCount;
 
+    // 児童のセリフを一瞬表示
+    document.getElementById('speaker-label').textContent = studentName;
+    document.getElementById('dialog-text').textContent = text;
+    document.getElementById('next-arrow').style.display = 'none';
+
+    conversationHistory.push({ role: "user", content: text });
+
+    await new Promise(r => setTimeout(r, 800));
+
+    setLoading(true);
     await callGimonster(text, false);
   }
 
+  // ===== API呼び出し =====
   async function callGimonster(userText, isFirstMessage) {
-    setLoading(true);
-
-    if (!isFirstMessage) {
-      conversationHistory.push({ role: "user", content: userText });
-    }
-
     try {
-      // Cloudflare WorkerにPOST（CORSは Worker側で解決済み）
       const response = await fetch(WORKER_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -272,47 +449,81 @@
       });
 
       const data = await response.json();
+      setLoading(false);
 
       if (data.result === "error") {
-        appendMessage('gimo', 'エラーが起きたギモ…（' + data.message + '）先生に伝えてほしいギモ。');
-        setLoading(false);
+        showSystemMessage("エラーが起きたギモ…先生に伝えてほしいギモ。");
         return;
       }
 
       const reply = data.reply;
-      appendMessage('gimo', reply);
-
       conversationHistory.push({ role: "assistant", content: reply });
-
-      // 記録をGASに送信（失敗しても会話は止めない）
       logToSheet(userText, reply);
 
+      // 正解判定
+      const isClear = reply.includes("大正解ギモ");
+
+      // ギモンスターのセリフ表示
+      document.getElementById('speaker-label').textContent = "ギモンスター";
+
+      // 正解ならバウンス、それ以外はシェイク（演出）
+      const wrap = document.getElementById('enemy-wrap');
+      wrap.classList.remove('shake', 'bounce');
+      void wrap.offsetWidth;
+      wrap.classList.add(isClear ? 'bounce' : 'shake');
+
+      showReply(reply);
+
+      if (isClear) {
+        setTimeout(() => {
+          document.getElementById('clear-sub').textContent =
+            studentName + 'は「' + topic + '」の答えにたどり着いた！';
+          document.getElementById('clear-overlay').classList.add('show');
+        }, 2000);
+      }
+
     } catch (err) {
-      appendMessage('gimo', '通信エラーが起きたギモ…ネットワークを確認してほしいギモ。');
+      setLoading(false);
+      showSystemMessage("通信エラーが起きたギモ…ネットワークを確認してほしいギモ。");
       console.error(err);
     }
+  }
 
-    setLoading(false);
+  function setLoading(isLoading) {
+    document.getElementById('loading-dots').style.display = isLoading ? 'block' : 'none';
+    document.getElementById('dialog-text').style.display = isLoading ? 'none' : 'block';
+    if (isLoading) {
+      document.getElementById('speaker-label').textContent = "ギモンスター";
+      document.getElementById('next-arrow').style.display = 'none';
+    }
+    const sendBtn = document.getElementById('send-btn');
+    if (sendBtn) sendBtn.disabled = isLoading;
+  }
+
+  function showSystemMessage(msg) {
+    document.getElementById('speaker-label').textContent = "システム";
+    document.getElementById('dialog-text').textContent = msg;
+    showInput();
   }
 
   function logToSheet(userText, gimoReply) {
-    const payload = {
-      action: "log",
-      timestamp: new Date().toISOString(),
-      studentName: studentName,
-      topic: topic,
-      turnCount: turnCount,
-      userText: userText,
-      gimoReply: gimoReply
-    };
-
+    if (!GAS_WEBAPP_URL || GAS_WEBAPP_URL === "YOUR_GAS_WEBAPP_URL_HERE") return;
     fetch(GAS_WEBAPP_URL, {
       method: "POST",
       mode: "no-cors",
-      body: JSON.stringify(payload)
-    }).catch(err => console.error('記録送信エラー:', err));
+      body: JSON.stringify({
+        action: "log",
+        timestamp: new Date().toISOString(),
+        studentName,
+        topic,
+        turnCount,
+        userText,
+        gimoReply
+      })
+    }).catch(() => {});
   }
 </script>
-
 </body>
 </html>
+
+
