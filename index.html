@@ -600,7 +600,8 @@
       logToSheet(userText, reply);
 
       // ★ 正解判定：フラグとして渡すだけ。セリフ表示は通常通り行う
-      const isClear = reply.includes("大正解ギモ");
+      const isClear = reply.includes("###CLEAR###");
+      const cleanReply = reply.replace("###CLEAR###", "").trim();
 
       document.getElementById('speaker-label').textContent = "ギモンスター";
 
@@ -610,7 +611,7 @@
       wrap.classList.add(isClear ? 'bounce' : 'shake');
 
       // ★ clearAfterフラグをshowReplyに渡す
-      showReply(reply, isClear);
+      showReply(cleanReply, isClear);
 
     } catch (err) {
       setLoading(false);
