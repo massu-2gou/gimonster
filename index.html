@@ -285,8 +285,9 @@
   const WORKER_URL = "https://gimonster.ryuvow.workers.dev/"; // ★ CloudflareワーカーのURLをここに入れる
   const GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwOmvOxUdtXTtD-TnrmxqeJohSk-tD6HTvs_-jI0LpGDdBHRuel_HXT3RyzwysT4vM/exec"; // ★ GASのWebAppのURL（記録用）
   const HP_MAX = 100;
-  const HP_PER_TURN = 8;   // 1ターンごとに減るHP
+  const HP_PER_TURN = 8;   // 1ターンごとに減るHP（ヒントは減らない）
   const HINT_MAX = 3;
+  const TURN_LIMIT = Math.floor(HP_MAX / HP_PER_TURN); // HPが0になるターン数
   // ================
 
   let conversationHistory = [];
@@ -333,8 +334,7 @@
     // 「ヒントをください」としてギモンスターに送信
     const hintText = "わからないので、ヒントをください";
     hideInput();
-    turnCount++;
-    damageHp();
+    // ヒントはターン数もHPも消費しない
     document.getElementById('speaker-label').textContent = studentName;
     document.getElementById('dialog-text').textContent = hintText;
     document.getElementById('next-arrow').style.display = 'none';
@@ -493,6 +493,8 @@
     const input = document.getElementById('user-input');
     const text = input.value.trim();
     if (!text || document.getElementById('send-btn').disabled) return;
+    // HP0（ターン上限）に達していたら入力を受け付けない
+    if (hp <= 0) { return; }
 
     hideInput();
     turnCount++;
@@ -506,11 +508,12 @@
 
     await new Promise(r => setTimeout(r, 700));
     setLoading(true);
-    await callGimonster(text, false);
+    // HP0フラグを渡す（ギモンスターにまとめを促す）
+    await callGimonster(text, false, hp <= 0);
   }
 
   // ===== API呼び出し =====
-  async function callGimonster(userText, isFirstMessage) {
+  async function callGimonster(userText, isFirstMessage, isLastTurn = false) {
     try {
       const res = await fetch(WORKER_URL, {
         method: "POST",
@@ -519,7 +522,8 @@
           topic,
           messages: isFirstMessage
             ? [{ role: "user", content: userText }]
-            : conversationHistory
+            : conversationHistory,
+          isLastTurn
         })
       });
       const data = await res.json();
