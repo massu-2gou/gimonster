@@ -24,23 +24,23 @@
   #setup-screen {
     background: #000;
     border: 4px solid #fff;
-    padding: 32px 28px;
-    max-width: 420px;
-    width: 90%;
+    padding: 36px 32px;
+    max-width: 520px;
+    width: 92%;
     text-align: center;
   }
   #setup-screen h1 {
-    font-size: 20px;
+    font-size: 24px;
     color: #FFD700;
-    margin-bottom: 24px;
+    margin-bottom: 28px;
     line-height: 1.6;
   }
-  .setup-field { margin-bottom: 18px; text-align: left; }
+  .setup-field { margin-bottom: 20px; text-align: left; }
   .setup-field label {
     display: block;
-    font-size: 13px;
+    font-size: 15px;
     color: #aaa;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
   }
   .setup-field input,
   .setup-field textarea {
@@ -49,13 +49,13 @@
     border: 2px solid #555;
     color: #fff;
     font-family: 'DotGothic16', monospace;
-    font-size: 15px;
-    padding: 10px;
+    font-size: 17px;
+    padding: 12px;
     outline: none;
   }
   .setup-field input:focus,
   .setup-field textarea:focus { border-color: #FFD700; }
-  .setup-field textarea { min-height: 80px; resize: vertical; }
+  .setup-field textarea { min-height: 90px; resize: vertical; }
   #start-btn {
     margin-top: 8px;
     width: 100%;
@@ -63,15 +63,15 @@
     color: #000;
     border: none;
     font-family: 'DotGothic16', monospace;
-    font-size: 16px;
-    padding: 14px;
+    font-size: 18px;
+    padding: 16px;
     cursor: pointer;
   }
   #start-btn:hover { background: #ffe54d; }
   #start-btn:disabled { background: #555; color: #888; cursor: default; }
 
   /* ===== ゲーム画面 ===== */
-  #game-screen { display: none; width: 100%; max-width: 640px; }
+  #game-screen { display: none; width: 100%; max-width: 720px; }
 
   /* 上半分：フィールド */
   .field {
@@ -88,73 +88,72 @@
     transform: translate(-50%, -60%);
   }
   #enemy-img {
-    width: 160px;
-    height: 160px;
+    width: 180px;
+    height: 180px;
     image-rendering: pixelated;
     display: block;
   }
   .enemy-wrap.shake { animation: shake 0.4s; }
   @keyframes shake {
     0%,100%{transform:translate(-50%,-60%)}
-    25%{transform:translate(calc(-50% - 8px),-60%)}
-    75%{transform:translate(calc(-50% + 8px),-60%)}
+    25%{transform:translate(calc(-50% - 10px),-60%)}
+    75%{transform:translate(calc(-50% + 10px),-60%)}
   }
-  .enemy-wrap.bounce { animation: bounce 0.4s; }
+  .enemy-wrap.bounce { animation: bounce 0.5s; }
   @keyframes bounce {
     0%,100%{transform:translate(-50%,-60%)}
-    50%{transform:translate(-50%,calc(-60% - 16px))}
+    50%{transform:translate(-50%,calc(-60% - 20px))}
   }
 
   /* ターンカウンター */
   .turn-badge {
     position: absolute;
-    top: 8px;
-    right: 10px;
-    background: rgba(0,0,0,0.7);
+    top: 10px;
+    right: 12px;
+    background: rgba(0,0,0,0.75);
     border: 2px solid #FFD700;
     color: #FFD700;
-    font-size: 12px;
-    padding: 4px 10px;
+    font-size: 14px;
+    padding: 5px 12px;
   }
 
-  /* 下半分：テキストウィンドウ */
+  /* テキストウィンドウ */
   .text-window {
     background: #000;
     border: 4px solid #fff;
     border-top: none;
-    padding: 16px 20px 14px;
-    min-height: 120px;
+    padding: 20px 24px 18px;
+    min-height: 140px;
     position: relative;
   }
   .speaker-label {
-    font-size: 12px;
+    font-size: 14px;
     color: #FFD700;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
   }
   #dialog-text {
-    font-size: 15px;
-    line-height: 1.8;
+    font-size: 18px;
+    line-height: 2.0;
     color: #fff;
-    min-height: 60px;
+    min-height: 72px;
     white-space: pre-wrap;
   }
-  /* セリフ送り矢印 */
   #next-arrow {
     position: absolute;
-    bottom: 12px;
-    right: 16px;
-    font-size: 18px;
+    bottom: 14px;
+    right: 18px;
+    font-size: 22px;
     color: #FFD700;
     animation: blink 0.8s step-end infinite;
     display: none;
   }
   @keyframes blink { 50% { opacity: 0; } }
-
-  /* ローディング */
   #loading-dots {
     color: #aaa;
-    font-size: 14px;
+    font-size: 16px;
     display: none;
+    min-height: 72px;
+    padding-top: 8px;
   }
 
   /* 入力エリア */
@@ -163,8 +162,8 @@
     border: 4px solid #fff;
     border-top: 2px solid #444;
     display: none;
-    padding: 12px 14px;
-    gap: 8px;
+    padding: 14px 16px;
+    gap: 10px;
     align-items: center;
   }
   .input-area.visible { display: flex; }
@@ -174,8 +173,8 @@
     border: 2px solid #555;
     color: #fff;
     font-family: 'DotGothic16', monospace;
-    font-size: 15px;
-    padding: 10px;
+    font-size: 17px;
+    padding: 12px;
     outline: none;
   }
   #user-input:focus { border-color: #FFD700; }
@@ -184,34 +183,34 @@
     color: #000;
     border: none;
     font-family: 'DotGothic16', monospace;
-    font-size: 14px;
-    padding: 10px 16px;
+    font-size: 16px;
+    padding: 12px 20px;
     cursor: pointer;
     white-space: nowrap;
   }
   #send-btn:disabled { background: #555; color: #888; cursor: default; }
 
-  /* 正解演出オーバーレイ */
+  /* 正解演出 */
   #clear-overlay {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.85);
+    background: rgba(0,0,0,0.88);
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    gap: 16px;
+    gap: 20px;
     z-index: 100;
   }
   #clear-overlay.show { display: flex; }
   .clear-title {
-    font-size: 28px;
+    font-size: 32px;
     color: #FFD700;
     text-align: center;
-    line-height: 1.6;
+    line-height: 1.7;
   }
   .clear-sub {
-    font-size: 14px;
+    font-size: 16px;
     color: #ccc;
     text-align: center;
   }
@@ -221,15 +220,14 @@
     color: #000;
     border: none;
     font-family: 'DotGothic16', monospace;
-    font-size: 15px;
-    padding: 12px 32px;
+    font-size: 17px;
+    padding: 14px 40px;
     cursor: pointer;
   }
 </style>
 </head>
 <body>
 
-<!-- セットアップ画面 -->
 <div id="setup-screen">
   <h1>⚔ ギモンスターと<br>考えよう！</h1>
   <div class="setup-field">
@@ -243,7 +241,6 @@
   <button id="start-btn" onclick="startGame()">ぼうけんをはじめる！</button>
 </div>
 
-<!-- ゲーム画面 -->
 <div id="game-screen">
   <div class="field">
     <div class="enemy-wrap" id="enemy-wrap">
@@ -251,21 +248,18 @@
     </div>
     <div class="turn-badge" id="turn-badge">ターン 0</div>
   </div>
-
   <div class="text-window">
     <div class="speaker-label" id="speaker-label">ギモンスター</div>
     <div id="dialog-text"></div>
-    <div id="loading-dots">考え中…</div>
+    <div id="loading-dots">ギモンスターが考え中…</div>
     <div id="next-arrow">▼</div>
   </div>
-
   <div class="input-area" id="input-area">
     <input type="text" id="user-input" placeholder="きみの考えを書こう" maxlength="200">
     <button id="send-btn" onclick="sendMessage()">送る</button>
   </div>
 </div>
 
-<!-- 正解演出 -->
 <div id="clear-overlay">
   <div class="clear-title">✨ 大正解！！ ✨<br>ギモンスターを倒した！</div>
   <div class="clear-sub" id="clear-sub"></div>
@@ -284,12 +278,12 @@
   let topic = "";
   let turnCount = 0;
 
-  // テキスト送り用
-  let pendingPages = [];   // セリフを区切ったページ配列
+  let pendingPages = [];
   let currentPage = 0;
   let isTyping = false;
   let typingTimer = null;
-  let waitingForNext = false; // セリフ送り待ち状態
+  let waitingForNext = false;
+  let isClearPending = false; // ★ セリフ読了後にクリア画面を出すフラグ
 
   // ===== ゲーム開始 =====
   function startGame() {
@@ -302,25 +296,23 @@
     document.getElementById('game-screen').style.display = 'block';
 
     setLoading(true);
-    callGimonster("（ギモンスターとして、課題「" + topic + "」について元気よく自己紹介し、最初の問いかけをしてください。短めの文を区切りながら話してください）", true);
+    callGimonster("（ギモンスターとして、課題「" + topic + "」について元気よく自己紹介し、最初の問いかけをしてください）", true);
   }
 
   // ===== テキスト表示 =====
-  function showReply(text) {
-    // 「。」「！」「？」「ギモ」の後で改ページ区切り
-    const pages = splitIntoPages(text);
-    pendingPages = pages;
+  function showReply(text, clearAfter) {
+    isClearPending = !!clearAfter;
+    pendingPages = splitIntoPages(text);
     currentPage = 0;
     showPage();
   }
 
   function splitIntoPages(text) {
-    // 長さで区切る（60文字ごと、ただし文末を優先）
     const sentences = text.split(/(?<=[。！？\n])/);
     const pages = [];
     let current = "";
     for (const s of sentences) {
-      if ((current + s).length > 80 && current.length > 0) {
+      if ((current + s).length > 90 && current.length > 0) {
         pages.push(current.trim());
         current = s;
       } else {
@@ -333,9 +325,17 @@
 
   function showPage() {
     if (currentPage >= pendingPages.length) {
-      // 全ページ表示終了 → 入力を開放
       document.getElementById('next-arrow').style.display = 'none';
-      showInput();
+      // ★ クリアフラグが立っていればクリア画面、そうでなければ入力開放
+      if (isClearPending) {
+        setTimeout(() => {
+          document.getElementById('clear-sub').textContent =
+            studentName + 'は「' + topic + '」の答えにたどり着いた！';
+          document.getElementById('clear-overlay').classList.add('show');
+        }, 400);
+      } else {
+        showInput();
+      }
       return;
     }
 
@@ -345,7 +345,6 @@
     document.getElementById('next-arrow').style.display = 'none';
     document.getElementById('dialog-text').textContent = "";
 
-    // 1文字ずつ表示
     let i = 0;
     function typeNext() {
       if (i < pageText.length) {
@@ -354,14 +353,18 @@
         typingTimer = setTimeout(typeNext, 40);
       } else {
         isTyping = false;
-        // 最終ページでなければセリフ送り矢印を表示
         if (currentPage < pendingPages.length - 1) {
           waitingForNext = true;
           document.getElementById('next-arrow').style.display = 'block';
         } else {
-          // 最終ページ → 入力開放
-          document.getElementById('next-arrow').style.display = 'none';
-          showInput();
+          // 最終ページ
+          if (isClearPending) {
+            // クリア時は矢印を出してもう一度押させる
+            waitingForNext = true;
+            document.getElementById('next-arrow').style.display = 'block';
+          } else {
+            showInput();
+          }
         }
       }
     }
@@ -370,7 +373,6 @@
 
   function advancePage() {
     if (isTyping) {
-      // タイピング中はスキップ
       clearTimeout(typingTimer);
       isTyping = false;
       document.getElementById('dialog-text').textContent = pendingPages[currentPage];
@@ -378,8 +380,12 @@
         waitingForNext = true;
         document.getElementById('next-arrow').style.display = 'block';
       } else {
-        document.getElementById('next-arrow').style.display = 'none';
-        showInput();
+        if (isClearPending) {
+          waitingForNext = true;
+          document.getElementById('next-arrow').style.display = 'block';
+        } else {
+          showInput();
+        }
       }
     } else if (waitingForNext) {
       currentPage++;
@@ -387,16 +393,22 @@
     }
   }
 
-  // キーボード・タップでセリフ送り
+  // セリフ送り：Enterキー（変換中は無視）
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && !document.getElementById('input-area').classList.contains('visible')) {
-      advancePage();
+    if (e.key === 'Enter' && e.isComposing === false) {
+      const inputArea = document.getElementById('input-area');
+      if (!inputArea.classList.contains('visible')) {
+        advancePage();
+      }
     }
   });
-  document.getElementById('game-screen') && document.addEventListener('click', (e) => {
-    if (!document.getElementById('input-area').classList.contains('visible') &&
-        !e.target.closest('#input-area') &&
-        !e.target.closest('#setup-screen')) {
+
+  // セリフ送り：画面タップ（入力エリア以外）
+  document.addEventListener('click', (e) => {
+    const inputArea = document.getElementById('input-area');
+    if (!inputArea.classList.contains('visible') &&
+        !e.target.closest('#setup-screen') &&
+        !e.target.closest('#clear-overlay')) {
       advancePage();
     }
   });
@@ -405,13 +417,20 @@
     document.getElementById('input-area').classList.add('visible');
     document.getElementById('user-input').focus();
   }
-
   function hideInput() {
     document.getElementById('input-area').classList.remove('visible');
     document.getElementById('user-input').value = '';
   }
 
   // ===== メッセージ送信 =====
+  // ★ Enterキーで送信（変換中は無視）
+  document.getElementById('user-input').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.isComposing) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+
   async function sendMessage() {
     const input = document.getElementById('user-input');
     const text = input.value.trim();
@@ -421,15 +440,13 @@
     turnCount++;
     document.getElementById('turn-badge').textContent = 'ターン ' + turnCount;
 
-    // 児童のセリフを一瞬表示
     document.getElementById('speaker-label').textContent = studentName;
     document.getElementById('dialog-text').textContent = text;
     document.getElementById('next-arrow').style.display = 'none';
 
     conversationHistory.push({ role: "user", content: text });
 
-    await new Promise(r => setTimeout(r, 800));
-
+    await new Promise(r => setTimeout(r, 700));
     setLoading(true);
     await callGimonster(text, false);
   }
@@ -441,7 +458,7 @@
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          topic: topic,
+          topic,
           messages: isFirstMessage
             ? [{ role: "user", content: userText }]
             : conversationHistory
@@ -460,27 +477,18 @@
       conversationHistory.push({ role: "assistant", content: reply });
       logToSheet(userText, reply);
 
-      // 正解判定
+      // ★ 正解判定：フラグとして渡すだけ。セリフ表示は通常通り行う
       const isClear = reply.includes("大正解ギモ");
 
-      // ギモンスターのセリフ表示
       document.getElementById('speaker-label').textContent = "ギモンスター";
 
-      // 正解ならバウンス、それ以外はシェイク（演出）
       const wrap = document.getElementById('enemy-wrap');
       wrap.classList.remove('shake', 'bounce');
       void wrap.offsetWidth;
       wrap.classList.add(isClear ? 'bounce' : 'shake');
 
-      showReply(reply);
-
-      if (isClear) {
-        setTimeout(() => {
-          document.getElementById('clear-sub').textContent =
-            studentName + 'は「' + topic + '」の答えにたどり着いた！';
-          document.getElementById('clear-overlay').classList.add('show');
-        }, 2000);
-      }
+      // ★ clearAfterフラグをshowReplyに渡す
+      showReply(reply, isClear);
 
     } catch (err) {
       setLoading(false);
@@ -496,8 +504,7 @@
       document.getElementById('speaker-label').textContent = "ギモンスター";
       document.getElementById('next-arrow').style.display = 'none';
     }
-    const sendBtn = document.getElementById('send-btn');
-    if (sendBtn) sendBtn.disabled = isLoading;
+    document.getElementById('send-btn').disabled = isLoading;
   }
 
   function showSystemMessage(msg) {
@@ -511,19 +518,9 @@
     fetch(GAS_WEBAPP_URL, {
       method: "POST",
       mode: "no-cors",
-      body: JSON.stringify({
-        action: "log",
-        timestamp: new Date().toISOString(),
-        studentName,
-        topic,
-        turnCount,
-        userText,
-        gimoReply
-      })
+      body: JSON.stringify({ action:"log", timestamp:new Date().toISOString(), studentName, topic, turnCount, userText, gimoReply })
     }).catch(() => {});
   }
 </script>
 </body>
 </html>
-
-
