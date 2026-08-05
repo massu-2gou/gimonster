@@ -190,6 +190,86 @@
   }
   #send-btn:disabled { background: #555; color: #888; cursor: default; }
 
+  /* きろくボタン */
+  #log-btn {
+    position: absolute;
+    top: 10px;
+    left: 12px;
+    background: rgba(0,0,0,0.75);
+    border: 2px solid #fff;
+    color: #fff;
+    font-family: 'DotGothic16', monospace;
+    font-size: 13px;
+    padding: 5px 10px;
+    cursor: pointer;
+    z-index: 10;
+  }
+  #log-btn:hover { border-color: #FFD700; color: #FFD700; }
+
+  /* 振り返りオーバーレイ */
+  #log-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.92);
+    z-index: 200;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 16px;
+  }
+  #log-overlay.show { display: flex; }
+  .log-header {
+    width: 100%;
+    max-width: 680px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  .log-title { font-size: 18px; color: #FFD700; }
+  #log-close-btn {
+    background: none;
+    border: 2px solid #fff;
+    color: #fff;
+    font-family: 'DotGothic16', monospace;
+    font-size: 14px;
+    padding: 6px 14px;
+    cursor: pointer;
+  }
+  #log-close-btn:hover { border-color: #FFD700; color: #FFD700; }
+  .log-topic {
+    width: 100%;
+    max-width: 680px;
+    font-size: 13px;
+    color: #aaa;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #333;
+  }
+  .log-scroll {
+    width: 100%;
+    max-width: 680px;
+    overflow-y: auto;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding-bottom: 16px;
+  }
+  .log-entry { display: flex; flex-direction: column; gap: 4px; }
+  .log-entry-label { font-size: 12px; color: #888; }
+  .log-entry-label.gimo { color: #FFD700; }
+  .log-entry-bubble {
+    font-size: 15px;
+    line-height: 1.8;
+    padding: 12px 14px;
+    border-left: 3px solid #555;
+    color: #ddd;
+    white-space: pre-wrap;
+  }
+  .log-entry-bubble.gimo { border-left-color: #FFD700; color: #fff; }
+  .log-entry-bubble.user { border-left-color: #8ECAE6; color: #8ECAE6; }
+
   /* 正解演出 */
   #clear-overlay {
     display: none;
@@ -246,6 +326,7 @@
     <div class="enemy-wrap" id="enemy-wrap">
       <img id="enemy-img" src="enemy1.png" alt="ギモンスター">
     </div>
+  <button id="log-btn" onclick="openLog()">📜 きろく</button>
     <div class="turn-badge" id="turn-badge">ターン 0</div>
   </div>
   <div class="text-window">
@@ -263,10 +344,49 @@
 <div id="clear-overlay">
   <div class="clear-title">✨ 大正解！！ ✨<br>ギモンスターを倒した！</div>
   <div class="clear-sub" id="clear-sub"></div>
-  <button id="retry-btn" onclick="location.reload()">もう一度あそぶ</button>
+  <button onclick="openLog()" style="background:#fff;color:#000;border:none;font-family:DotGothic16,monospace;font-size:16px;padding:12px 32px;cursor:pointer;">📜 かいわをみる</button><br><button id="retry-btn" onclick="location.reload()">もう一度あそぶ</button>
 </div>
 
 <script>
+
+  // ===== 振り返りログ =====
+  let chatLog = []; // {role, name, text} の配列
+
+  function addLog(role, name, text) {
+    chatLog.push({ role, name, text });
+  }
+
+  function openLog() {
+    const scroll = document.getElementById('log-scroll');
+    const topicEl = document.getElementById('log-topic');
+    topicEl.textContent = '課題：' + topic;
+    scroll.innerHTML = '';
+
+    if (chatLog.length === 0) {
+      scroll.innerHTML = '<div style="color:#aaa;font-size:14px;">まだかいわがありません</div>';
+    } else {
+      chatLog.forEach((entry) => {
+        const div = document.createElement('div');
+        div.className = 'log-entry';
+        const label = document.createElement('div');
+        label.className = 'log-entry-label ' + (entry.role === 'gimo' ? 'gimo' : '');
+        label.textContent = entry.name;
+        const bubble = document.createElement('div');
+        bubble.className = 'log-entry-bubble ' + entry.role;
+        bubble.textContent = entry.text;
+        div.appendChild(label);
+        div.appendChild(bubble);
+        scroll.appendChild(div);
+      });
+      // 最下部にスクロール
+      scroll.scrollTop = scroll.scrollHeight;
+    }
+    document.getElementById('log-overlay').classList.add('show');
+  }
+
+  function closeLog() {
+    document.getElementById('log-overlay').classList.remove('show');
+  }
   // ===== 設定（ここを書き換えてください） =====
   const WORKER_URL = "https://gimonster.ryuvow.workers.dev/"; // ★ CloudflareワーカーのURLをここに入れる
   const GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwOmvOxUdtXTtD-TnrmxqeJohSk-tD6HTvs_-jI0LpGDdBHRuel_HXT3RyzwysT4vM/exec"; // ★ GASのWebAppのURL（記録用）
@@ -445,6 +565,7 @@
     document.getElementById('next-arrow').style.display = 'none';
 
     conversationHistory.push({ role: "user", content: text });
+    addLog('user', studentName, text);
 
     await new Promise(r => setTimeout(r, 700));
     setLoading(true);
@@ -475,6 +596,7 @@
 
       const reply = data.reply;
       conversationHistory.push({ role: "assistant", content: reply });
+      addLog('gimo', 'ギモンスター', reply);
       logToSheet(userText, reply);
 
       // ★ 正解判定：フラグとして渡すだけ。セリフ表示は通常通り行う
@@ -522,5 +644,14 @@
     }).catch(() => {});
   }
 </script>
+
+<div id="log-overlay">
+  <div class="log-header">
+    <div class="log-title">📜 かいわのきろく</div>
+    <button id="log-close-btn" onclick="closeLog()">とじる</button>
+  </div>
+  <div class="log-topic" id="log-topic"></div>
+  <div class="log-scroll" id="log-scroll"></div>
+</div>
 </body>
 </html>
