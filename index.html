@@ -356,6 +356,14 @@
     document.getElementById('setup-screen').style.display = 'none';
     document.getElementById('game-screen').style.display = 'block';
 
+    // 背景と敵をそれぞれ独立してランダムに選択
+    const fields  = ['field1.jpg', 'field2.jpg'];
+    const enemies = ['enemy1.png', 'enemy2.png'];
+    const field  = fields[Math.floor(Math.random() * fields.length)];
+    const enemy  = enemies[Math.floor(Math.random() * enemies.length)];
+    document.querySelector('.field').style.backgroundImage = "url('" + field + "')";
+    document.getElementById('enemy-img').src = enemy;
+
     updateHp(HP_MAX);
     updateHintDisplay();
     setLoading(true);
