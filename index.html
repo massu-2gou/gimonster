@@ -143,6 +143,7 @@
   #send-btn:disabled { background: #555; color: #888; cursor: default; }
   /* ヒントボタン */
   #hint-btn {
+    display: none;
     background: #1a6a1a; color: #fff; border: 2px solid #4cff4c;
     font-family: 'DotGothic16', monospace; font-size: 14px;
     padding: 12px 14px; cursor: pointer; white-space: nowrap;
@@ -282,7 +283,7 @@
 
 <script>
   // ===== 設定 =====
-  const WORKER_URL = "https://gimonster.ryuvow.workers.dev/"; // ★ CloudflareワーカーのURLをここに入れる
+ const WORKER_URL = "https://gimonster.ryuvow.workers.dev/"; // ★ CloudflareワーカーのURLをここに入れる
   const GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwOmvOxUdtXTtD-TnrmxqeJohSk-tD6HTvs_-jI0LpGDdBHRuel_HXT3RyzwysT4vM/exec"; // ★ GASのWebAppのURL（記録用）
   const HP_MAX = 100;
   const HP_PER_TURN = 8;   // 1ターンごとに減るHP（ヒントは減らない）
@@ -324,7 +325,10 @@
     const remaining = HINT_MAX - hintUsed;
     document.getElementById('hint-pts-display').textContent =
       '💡'.repeat(remaining) + '　'.repeat(hintUsed);
-    document.getElementById('hint-btn').disabled = remaining <= 0;
+    // 2ターン目から表示（最初から使えると逃げ道になるため）
+    const btn = document.getElementById('hint-btn');
+    btn.style.display = turnCount >= 2 ? 'inline-block' : 'none';
+    btn.disabled = remaining <= 0;
   }
 
   function useHint() {
@@ -507,6 +511,7 @@
     hideInput();
     turnCount++;
     damageHp();
+    updateHintDisplay(); // ターン数更新後にヒントボタン表示を再チェック
 
     document.getElementById('speaker-label').textContent = studentName;
     document.getElementById('dialog-text').textContent = text;
@@ -547,7 +552,7 @@
 
       conversationHistory.push({ role: "assistant", content: reply });
       addLog('gimo', 'ギモンスター', reply);
-      logToSheet(userText, reply);
+      if (!isFirstMessage) logToSheet(userText, reply, isClear);
 
       document.getElementById('speaker-label').textContent = "ギモンスター";
       const wrap = document.getElementById('enemy-wrap');
@@ -612,11 +617,11 @@
 
   function closeLog() { document.getElementById('log-overlay').classList.remove('show'); }
 
-  function logToSheet(userText, gimoReply) {
+  function logToSheet(userText, gimoReply, isClear = false) {
     if (!GAS_WEBAPP_URL || GAS_WEBAPP_URL === "YOUR_GAS_WEBAPP_URL_HERE") return;
     fetch(GAS_WEBAPP_URL, {
       method: "POST", mode: "no-cors",
-      body: JSON.stringify({ action:"log", timestamp:new Date().toISOString(), studentName, topic, turnCount, hintUsed, userText, gimoReply })
+      body: JSON.stringify({ action:"log", timestamp:new Date().toISOString(), studentName, topic, turnCount, hintUsed, userText, gimoReply, isClear })
     }).catch(() => {});
   }
 </script>
