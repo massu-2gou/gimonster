@@ -305,6 +305,7 @@
   let typingTimer = null;
   let waitingForNext = false;
   let isClearPending = false;
+  let summaryTurnSent = false; // HP0後の「まとめ用の1ターン」を送信済みか
 
   // ===== HP管理 =====
   function updateHp(newHp) {
@@ -505,8 +506,9 @@
     const input = document.getElementById('user-input');
     const text = input.value.trim();
     if (!text || document.getElementById('send-btn').disabled) return;
-    // HP0（ターン上限）に達していたら入力を受け付けない
-    if (hp <= 0) { return; }
+    // HP0後は「まとめ用の1ターン」を1回だけ許可し、それ以降はブロックする
+    if (hp <= 0 && summaryTurnSent) { return; }
+    if (hp <= 0) { summaryTurnSent = true; }
 
     hideInput();
     turnCount++;
@@ -547,7 +549,9 @@
       }
 
       const rawReply = data.reply;
-      const isClear = rawReply.includes("###CLEAR###");
+      // isLastTurn（HP0後のまとめターン）なら、CLEAR表記がなくても強制的にクリア扱いにする
+      // （書き忘れで無限に詰むのを防ぐ保険）
+      const isClear = rawReply.includes("###CLEAR###") || isLastTurn;
       const reply = rawReply.replace("###CLEAR###", "").trim();
 
       conversationHistory.push({ role: "assistant", content: reply });
