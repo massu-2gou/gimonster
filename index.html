@@ -305,6 +305,7 @@
   let typingTimer = null;
   let waitingForNext = false;
   let isClearPending = false;
+  let hp0TurnCount = 0; // HP0になってからの経過ターン数（猶予2ターンで強制終了）
 
   // ===== HP管理 =====
   function updateHp(newHp) {
@@ -346,7 +347,7 @@
     addLog('user', studentName, hintText + '（ヒント使用）');
     setTimeout(() => {
       setLoading(true);
-      callGimonster(hintText, false, hp <= 0);
+      callGimonster(hintText, false, hp0TurnCount > 2);
     }, 600);
   }
 
@@ -505,10 +506,11 @@
     const input = document.getElementById('user-input');
     const text = input.value.trim();
     if (!text || document.getElementById('send-btn').disabled) return;
-    // HP0以降も送信は常に許可する（isLastTurnの強制CLEARで確実に終わらせる）
+    // HP0以降も送信は常に許可する（猶予ターンを超えたらisLastTurnで強制的に終わらせる）
 
     hideInput();
     turnCount++;
+    if (hp <= 0) { hp0TurnCount++; } // HP0になった後の経過ターンを数える
     damageHp();
     updateHintDisplay(); // ターン数更新後にヒントボタン表示を再チェック
 
@@ -521,7 +523,8 @@
     await new Promise(r => setTimeout(r, 700));
     setLoading(true);
     // HP0フラグを渡す（ギモンスターにまとめを促す）
-    await callGimonster(text, false, hp <= 0);
+    // 猶予2ターンを超えたら強制的にまとめさせる
+    await callGimonster(text, false, hp0TurnCount > 2);
   }
 
   // ===== API呼び出し =====
