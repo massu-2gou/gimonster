@@ -305,7 +305,6 @@
   let typingTimer = null;
   let waitingForNext = false;
   let isClearPending = false;
-  let summaryTurnSent = false; // HP0後の「まとめ用の1ターン」を送信済みか
 
   // ===== HP管理 =====
   function updateHp(newHp) {
@@ -347,7 +346,7 @@
     addLog('user', studentName, hintText + '（ヒント使用）');
     setTimeout(() => {
       setLoading(true);
-      callGimonster(hintText, false);
+      callGimonster(hintText, false, hp <= 0);
     }, 600);
   }
 
@@ -506,9 +505,7 @@
     const input = document.getElementById('user-input');
     const text = input.value.trim();
     if (!text || document.getElementById('send-btn').disabled) return;
-    // HP0後は「まとめ用の1ターン」を1回だけ許可し、それ以降はブロックする
-    if (hp <= 0 && summaryTurnSent) { return; }
-    if (hp <= 0) { summaryTurnSent = true; }
+    // HP0以降も送信は常に許可する（isLastTurnの強制CLEARで確実に終わらせる）
 
     hideInput();
     turnCount++;
