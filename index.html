@@ -399,6 +399,7 @@
     studentNumber = document.getElementById('number-select').value;
     topic = document.getElementById('topic').value.trim();
     if (!studentName || !topic) { alert('なまえと課題を入力してね！'); return; }
+    if (studentClass == 1 && studentGrade == 1) { alert('あなたは本当に1年1組ですか？'); return; }
     if (WORKER_URL === "YOUR_WORKER_URL_HERE") { alert('WORKER_URLを設定してください'); return; }
 
     document.getElementById('setup-screen').style.display = 'none';
